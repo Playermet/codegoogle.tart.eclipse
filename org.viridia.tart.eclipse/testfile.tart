@@ -1,0 +1,32 @@
+
+'a'
+
+"this is a test"
+"this is a test\"."
+
+'this'12'this'
+
+// test
+
+/* test */
+
+/** test */
+
+/** This is a test
+		*/
+
+CamelCaseIdent
+
+class Foo : Bar {
+  private static def x() -> String {
+    let var:int = 0;
+  }
+}
+
+def main() {
+  return 12;
+  for i in 20 .. 23 {
+  }
+}
+
+0x12

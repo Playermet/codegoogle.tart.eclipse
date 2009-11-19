@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension point="org.eclipse.ui.editors">
+      <editor name="Tart Editor"
+	          extensions="tart"
+	          icon="icons/sample.gif"
+	          contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
+	          class="org.viridia.tart.eclipse.editors.TartSourceEditor"
+	          id="org.viridia.tart.eclipse.editors.TartSourceEditor">
+      </editor>
+   </extension>
+   <extension point="org.eclipse.ui.preferencePages">
+      <page name="Tart"
+            class="org.viridia.tart.eclipse.preferences.TartPreferencePage"
+            id="org.viridia.tart.eclipse.preferences.TartPreferencePage">
+      </page>
+   </extension>
+   <extension point="org.eclipse.core.runtime.preferences">
+      <initializer class="org.viridia.tart.eclipse.preferences.TartPrefs">
+      </initializer>
+   </extension>
+</plugin>
