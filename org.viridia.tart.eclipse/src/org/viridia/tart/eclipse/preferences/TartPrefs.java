@@ -56,6 +56,7 @@ public class TartPrefs extends AbstractPreferenceInitializer {
   public static final String TART_NUMBER = "TART_NUMBER";
   public static final String TART_IDENT = "TART_IDENT";
   public static final String TART_OPERATOR = "TART_OPERATOR";
+  public static final String TART_OPERATOR_KEYWORD = "TART_OPERATOR_KEYWORD";
   public static final String TART_BRACE = "TART_BRACE";
   public static final String TART_DEFAULT = "TART_DEFAULT";
 
@@ -76,6 +77,7 @@ public class TartPrefs extends AbstractPreferenceInitializer {
     new SyntaxElement(TART_NUMBER, "Numeric constant", new RGB(64, 0, 128), 0),
     new SyntaxElement(TART_IDENT, "Identifier", new RGB(0, 0, 0), 0),
     new SyntaxElement(TART_OPERATOR, "Operator", new RGB(0, 0, 0), 0),
+    new SyntaxElement(TART_OPERATOR_KEYWORD, "Operator Keyword", new RGB(0, 0, 128), SWT.BOLD),
     new SyntaxElement(TART_BRACE, "Braces", new RGB(0, 128, 0), 0)
   };
   

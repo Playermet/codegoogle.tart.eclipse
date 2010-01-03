@@ -4,7 +4,7 @@
    <extension point="org.eclipse.ui.editors">
       <editor name="Tart Editor"
 	          extensions="tart"
-	          icon="icons/sample.gif"
+	          icon="icons/tartsrc.png"
 	          contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
 	          class="org.viridia.tart.eclipse.editors.TartSourceEditor"
 	          id="org.viridia.tart.eclipse.editors.TartSourceEditor">

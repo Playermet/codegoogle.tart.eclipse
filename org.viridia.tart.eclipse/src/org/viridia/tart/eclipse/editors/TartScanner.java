@@ -23,8 +23,8 @@ public class TartScanner extends RuleBasedScanner {
 
   // Declaration keywords
   static final public String[] DECL_KEYWORDS = { "namespace", "class",
-      "struct", "interface", "protocol", "enum", "let", "var", "def", "redef",
-      "fn", "get", "set", "macro", "friend" };
+      "struct", "interface", "protocol", "enum", "let", "var", "def", "undef",
+      "override", "fn", "get", "set", "macro", "friend" };
 
   // Operator keywords
   static final public String[] OPERATOR_KEYWORDS = { "and", "or",
@@ -41,7 +41,7 @@ public class TartScanner extends RuleBasedScanner {
 
   // Modifiers 
   static final public String[] DECL_MODIFIERS = { "const", "constable",
-      "mutable", "readonly", "static", "abstract", "final" };
+      "mutable", "readonly", "static", "abstract", "final", "optional" };
 
   // Special symbols
   static final public String[] SPECIAL_KEYWORDS = { "self", "super", "true",
@@ -305,7 +305,7 @@ public class TartScanner extends RuleBasedScanner {
     // Detector for keywords
     IToken statementKeyword = new Token(styles.getTextStyle(TartPrefs.TART_STMT_KEYWORD));
     IToken declarationKeyword = new Token(styles.getTextStyle(TartPrefs.TART_DECL_KEYWORD));
-    IToken operatorKeyword = new Token(styles.getTextStyle(TartPrefs.TART_OPERATOR));
+    IToken operatorKeyword = new Token(styles.getTextStyle(TartPrefs.TART_OPERATOR_KEYWORD));
     IToken visibilityKeywords = new Token(styles.getTextStyle(TartPrefs.TART_DECL_VISIBILITY));
     IToken modifierKeywords = new Token(styles.getTextStyle(TartPrefs.TART_DECL_MODIFIER));
     IToken builtinTypeName = new Token(styles.getTextStyle(TartPrefs.TART_BUILTIN_TYPENAME));
