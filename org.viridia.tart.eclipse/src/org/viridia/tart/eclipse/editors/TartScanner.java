@@ -259,6 +259,28 @@ public class TartScanner extends RuleBasedScanner {
     }
   }
 
+  private static class AttributeRule implements IRule {
+    private final IToken attributeToken;
+
+    public AttributeRule(TartStyleManager styles) {
+      this.attributeToken = new Token(styles.getTextStyle(TartPrefs.TART_ATTRIBUTE));
+    }
+
+    public IToken evaluate(ICharacterScanner scanner) {
+      int c = scanner.read();
+      if (c == '@') {
+        c = scanner.read();
+        while (Character.isJavaIdentifierPart(c) || c == '.') {
+          c = scanner.read();
+        }
+        scanner.unread();
+        return attributeToken;
+      }
+      scanner.unread();
+      return Token.UNDEFINED;
+    }
+  }
+	    
   public TartScanner(TartStyleManager styles) {
     this.styles = styles;
     defineRules();
@@ -271,6 +293,7 @@ public class TartScanner extends RuleBasedScanner {
         defineCharLiteralRule(),
         defineStringLiteralRule(),
         defineOperatorRule(),
+        defineAttributeRule(),
         defineKeywordRule(),
         defineIdentRule() });
   }
@@ -301,6 +324,10 @@ public class TartScanner extends RuleBasedScanner {
     return new OperatorRule(styles);
   }
 
+  private IRule defineAttributeRule() {
+    return new AttributeRule(styles);
+  }
+
   private IRule defineKeywordRule() {
     // Detector for keywords
     IToken statementKeyword = new Token(styles.getTextStyle(TartPrefs.TART_STMT_KEYWORD));
@@ -310,6 +337,7 @@ public class TartScanner extends RuleBasedScanner {
     IToken modifierKeywords = new Token(styles.getTextStyle(TartPrefs.TART_DECL_MODIFIER));
     IToken builtinTypeName = new Token(styles.getTextStyle(TartPrefs.TART_BUILTIN_TYPENAME));
     IToken builtinSymbolName = new Token(styles.getTextStyle(TartPrefs.TART_BUILTIN_SYMBOL));
+    IToken attributeExpr = new Token(styles.getTextStyle(TartPrefs.TART_ATTRIBUTE));
     
     IWordDetector keywordDetector = new KeywordDetector();
     WordRule keywordRule = new WordRule(keywordDetector);

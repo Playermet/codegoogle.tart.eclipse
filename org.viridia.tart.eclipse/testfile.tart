@@ -17,7 +17,7 @@
 
 CamelCaseIdent
 
-class Foo : Bar {
+@Optional.String class Foo : Bar {
   private static def x() -> String {
     let var:int = 0;
   }
