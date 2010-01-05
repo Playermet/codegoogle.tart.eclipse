@@ -11,15 +11,18 @@ import org.eclipse.jface.text.rules.DefaultDamagerRepairer;
 import org.eclipse.jface.text.rules.ITokenScanner;
 import org.eclipse.jface.text.rules.Token;
 import org.eclipse.jface.text.source.ISourceViewer;
-import org.eclipse.jface.text.source.SourceViewerConfiguration;
+import org.eclipse.jface.util.PropertyChangeEvent;
+import org.eclipse.ui.editors.text.TextSourceViewerConfiguration;
+import org.viridia.tart.eclipse.Activator;
 import org.viridia.tart.eclipse.preferences.TartPrefs;
 
-public class TartSourceViewerConfiguration extends SourceViewerConfiguration {
+public class TartSourceViewerConfiguration extends TextSourceViewerConfiguration {
   private TartDoubleClickStrategy doubleClickStrategy;
   private TartScanner tartScanner;
   private TartStyleManager styleManager;
 
   public TartSourceViewerConfiguration(TartStyleManager styleManager) {
+    super(Activator.getDefault().getPreferenceStore());
     this.styleManager = styleManager;
   }
 
@@ -86,5 +89,9 @@ public class TartSourceViewerConfiguration extends SourceViewerConfiguration {
 
   public int getTabWidth(ISourceViewer sourceViewer) {
     return 2;
+  }
+
+  public void handlePropertyChangedEvent(PropertyChangeEvent event) {
+    styleManager.adaptToColorChange(event);
   }
 }

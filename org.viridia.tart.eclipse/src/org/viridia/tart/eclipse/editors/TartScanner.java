@@ -123,10 +123,10 @@ public class TartScanner extends RuleBasedScanner {
   }
   
   private static class OperatorRule implements IRule {
-    private final IToken operatorToken;
+    private final IToken token;
     
-    public OperatorRule(TartStyleManager styles) {
-      this.operatorToken = new Token(styles.getTextStyle(TartPrefs.TART_BUILTIN_SYMBOL));
+    public OperatorRule(TartStyleManager styles, IToken token) {
+      this.token = token;
     }
     
     public IToken evaluate(ICharacterScanner scanner) {
@@ -134,110 +134,110 @@ public class TartScanner extends RuleBasedScanner {
       switch (c) {
         case ':':
           c = scanner.read();
-          if (c == ':') { return operatorToken; }
+          if (c == ':') { return token; }
           scanner.unread();
-          return operatorToken;
+          return token;
 
         case '+':
           scanner.read();
-          if (c == '+') { return operatorToken; }
-          if (c == '=') { return operatorToken; }
+          if (c == '+') { return token; }
+          if (c == '=') { return token; }
           scanner.unread();
-          return operatorToken;
+          return token;
 
         case '-':
           scanner.read();
-          if (c == '-') { return operatorToken; }
-          if (c == '=') { return operatorToken; }
-          if (c == '>') { return operatorToken; }
+          if (c == '-') { return token; }
+          if (c == '=') { return token; }
+          if (c == '>') { return token; }
           scanner.unread();
-          return operatorToken;
+          return token;
 
         case '*':
           scanner.read();
-          if (c == '=') { return operatorToken; }
+          if (c == '=') { return token; }
           scanner.unread();
-          return operatorToken;
+          return token;
 
         case '%':
           scanner.read();
-          if (c == '=') { return operatorToken; }
+          if (c == '=') { return token; }
           scanner.unread();
-          return operatorToken;
+          return token;
 
         case '^':
           scanner.read();
-          if (c == '=') { return operatorToken; }
+          if (c == '=') { return token; }
           scanner.unread();
-          return operatorToken;
+          return token;
 
         case '|':
           scanner.read();
-          if (c == '=') { return operatorToken; }
-          if (c == '|') { return operatorToken; }
+          if (c == '=') { return token; }
+          if (c == '|') { return token; }
           scanner.unread();
-          return operatorToken;
+          return token;
 
         case '&':
           scanner.read();
-          if (c == '=') { return operatorToken; }
-          if (c == '&') { return operatorToken; }
+          if (c == '=') { return token; }
+          if (c == '&') { return token; }
           scanner.unread();
-          return operatorToken;
+          return token;
 
         case '~':
           scanner.read();
-          if (c == '=') { return operatorToken; }
+          if (c == '=') { return token; }
           scanner.unread();
-          return operatorToken;
+          return token;
 
         case '>':
           scanner.read();
           if (c == '=') {
             scanner.read();
-            if (c == '?') { return operatorToken; }
+            if (c == '?') { return token; }
             scanner.unread();
-            return operatorToken;
+            return token;
           }
-          if (c == '?') { return operatorToken; }
+          if (c == '?') { return token; }
           if (c == '>') {
             scanner.read();
-            if (c == '=') { return operatorToken; }
+            if (c == '=') { return token; }
             scanner.unread();
-            return operatorToken;
+            return token;
           }
           scanner.unread();
-          return operatorToken;
+          return token;
 
         case '<':
           scanner.read();
           if (c == '=') {
             scanner.read();
-            if (c == '?') { return operatorToken; }
+            if (c == '?') { return token; }
             scanner.unread();
-            return operatorToken;
+            return token;
           }
-          if (c == '?') { return operatorToken; }
+          if (c == '?') { return token; }
           if (c == '<') {
             scanner.read();
-            if (c == '=') { return operatorToken; }
+            if (c == '=') { return token; }
             scanner.unread();
-            return operatorToken;
+            return token;
           }
           scanner.unread();
-          return operatorToken;
+          return token;
 
         case '=':
           scanner.read();
-          if (c == '=') { return operatorToken; }
+          if (c == '=') { return token; }
           scanner.unread();
-          return operatorToken;
+          return token;
 
         case '!':
           scanner.read();
-          if (c == '=') { return operatorToken; }
+          if (c == '=') { return token; }
           scanner.unread();
-          return operatorToken;
+          return token;
 
         case '{':
         case '}':
@@ -245,13 +245,13 @@ public class TartScanner extends RuleBasedScanner {
         case ']':
         case '(':
         case ')':
-          return operatorToken;
+          return token;
 
         case ';':
         case ',':
         case '?':
         case '$':
-          return operatorToken;
+          return token;
       }
 
       scanner.unread();
@@ -260,10 +260,10 @@ public class TartScanner extends RuleBasedScanner {
   }
 
   private static class AttributeRule implements IRule {
-    private final IToken attributeToken;
+    private final IToken token;
 
-    public AttributeRule(TartStyleManager styles) {
-      this.attributeToken = new Token(styles.getTextStyle(TartPrefs.TART_ATTRIBUTE));
+    public AttributeRule(TartStyleManager styles, IToken token) {
+      this.token = token;
     }
 
     public IToken evaluate(ICharacterScanner scanner) {
@@ -274,7 +274,7 @@ public class TartScanner extends RuleBasedScanner {
           c = scanner.read();
         }
         scanner.unread();
-        return attributeToken;
+        return token;
       }
       scanner.unread();
       return Token.UNDEFINED;
@@ -306,49 +306,37 @@ public class TartScanner extends RuleBasedScanner {
   }
   
   private IRule defineNumberRule() {
-    IToken numberToken = new Token(styles.getTextStyle(TartPrefs.TART_NUMBER));
-    return new NumberRule(numberToken);
+    return new NumberRule(styles.getToken(TartPrefs.TART_NUMBER));
   }
 
   private IRule defineCharLiteralRule() {
-    IToken charLiteralToken = new Token(styles.getTextStyle(TartPrefs.TART_STRING));
-    return new SingleLineRule("'", "'", charLiteralToken, '\\');
+    return new SingleLineRule("'", "'", styles.getToken(TartPrefs.TART_STRING), '\\');
   }
 
   private IRule defineStringLiteralRule() {
-    IToken stringLiteralToken = new Token(styles.getTextStyle(TartPrefs.TART_STRING));
-    return new SingleLineRule("\"", "\"", stringLiteralToken, '\\');
+    return new SingleLineRule("\"", "\"", styles.getToken(TartPrefs.TART_STRING), '\\');
   }
 
   private IRule defineOperatorRule() {
-    return new OperatorRule(styles);
+    return new OperatorRule(styles, styles.getToken(TartPrefs.TART_OPERATOR));
   }
 
   private IRule defineAttributeRule() {
-    return new AttributeRule(styles);
+    return new AttributeRule(styles, styles.getToken(TartPrefs.TART_ATTRIBUTE));
   }
 
   private IRule defineKeywordRule() {
     // Detector for keywords
-    IToken statementKeyword = new Token(styles.getTextStyle(TartPrefs.TART_STMT_KEYWORD));
-    IToken declarationKeyword = new Token(styles.getTextStyle(TartPrefs.TART_DECL_KEYWORD));
-    IToken operatorKeyword = new Token(styles.getTextStyle(TartPrefs.TART_OPERATOR_KEYWORD));
-    IToken visibilityKeywords = new Token(styles.getTextStyle(TartPrefs.TART_DECL_VISIBILITY));
-    IToken modifierKeywords = new Token(styles.getTextStyle(TartPrefs.TART_DECL_MODIFIER));
-    IToken builtinTypeName = new Token(styles.getTextStyle(TartPrefs.TART_BUILTIN_TYPENAME));
-    IToken builtinSymbolName = new Token(styles.getTextStyle(TartPrefs.TART_BUILTIN_SYMBOL));
-    IToken attributeExpr = new Token(styles.getTextStyle(TartPrefs.TART_ATTRIBUTE));
-    
     IWordDetector keywordDetector = new KeywordDetector();
     WordRule keywordRule = new WordRule(keywordDetector);
     
-    addWords(STATEMENT_KEYWORDS, keywordRule, statementKeyword);
-    addWords(DECL_KEYWORDS, keywordRule, declarationKeyword);
-    addWords(OPERATOR_KEYWORDS, keywordRule, operatorKeyword);
-    addWords(VISIBILITY, keywordRule, visibilityKeywords);
-    addWords(DECL_MODIFIERS, keywordRule, modifierKeywords);
-    addWords(BUILTIN_TYPES, keywordRule, builtinTypeName);
-    addWords(SPECIAL_KEYWORDS, keywordRule, builtinSymbolName);
+    addWords(STATEMENT_KEYWORDS, keywordRule, styles.getToken(TartPrefs.TART_STMT_KEYWORD));
+    addWords(DECL_KEYWORDS, keywordRule, styles.getToken(TartPrefs.TART_DECL_KEYWORD));
+    addWords(OPERATOR_KEYWORDS, keywordRule, styles.getToken(TartPrefs.TART_OPERATOR));
+    addWords(VISIBILITY, keywordRule, styles.getToken(TartPrefs.TART_DECL_VISIBILITY));
+    addWords(DECL_MODIFIERS, keywordRule, styles.getToken(TartPrefs.TART_DECL_MODIFIER));
+    addWords(BUILTIN_TYPES, keywordRule, styles.getToken(TartPrefs.TART_BUILTIN_TYPENAME));
+    addWords(SPECIAL_KEYWORDS, keywordRule, styles.getToken(TartPrefs.TART_BUILTIN_SYMBOL));
     return keywordRule;
   }
   

@@ -6,6 +6,8 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.source.ISourceViewer;
+import org.eclipse.jface.text.source.SourceViewerConfiguration;
+import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ST;
 import org.eclipse.swt.custom.StyledText;
@@ -15,6 +17,7 @@ import org.eclipse.ui.texteditor.DefaultRangeIndicator;
 import org.eclipse.ui.texteditor.ITextEditorActionDefinitionIds;
 import org.eclipse.ui.texteditor.IUpdate;
 import org.eclipse.ui.texteditor.TextNavigationAction;
+import org.viridia.tart.eclipse.Activator;
 
 public class TartSourceEditor extends TextEditor {
   private TartColorManager colorManager;
@@ -24,12 +27,33 @@ public class TartSourceEditor extends TextEditor {
     super();
     colorManager = new TartColorManager();
     styleManager = new TartStyleManager(colorManager);
+    setPreferenceStore(Activator.getDefault().getPreferenceStore());
     setSourceViewerConfiguration(new TartSourceViewerConfiguration(styleManager));
     setDocumentProvider(new TartDocumentProvider());
-
     setRangeIndicator(new DefaultRangeIndicator()); // enables standard
-    
-    //Activator.getDefault().getPreferenceStore().addPropertyChangeListener(this);
+  }
+
+  @Override
+  protected void handlePreferenceStoreChanged(PropertyChangeEvent event) {
+    String property = event.getProperty();
+    if (property.startsWith("TART_")) {
+      SourceViewerConfiguration configuration = getSourceViewerConfiguration();
+      if (configuration instanceof TartSourceViewerConfiguration) {
+        ((TartSourceViewerConfiguration) configuration).handlePropertyChangedEvent(event);
+      }
+    }
+
+    super.handlePreferenceStoreChanged(event);
+  }
+
+  @Override
+  protected boolean affectsTextPresentation(PropertyChangeEvent event) {
+    String property = event.getProperty();
+    if (property.startsWith("TART_")) {
+      return true;
+    }
+
+    return super.affectsTextPresentation(event);
   }
 
   @Override
