@@ -6,12 +6,15 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.source.ISourceViewer;
+import org.eclipse.jface.text.source.ISourceViewerExtension;
+import org.eclipse.jface.text.source.IVerticalRuler;
 import org.eclipse.jface.text.source.SourceViewerConfiguration;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ST;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.texteditor.DefaultRangeIndicator;
 import org.eclipse.ui.texteditor.ITextEditorActionDefinitionIds;
@@ -31,6 +34,16 @@ public class TartSourceEditor extends TextEditor {
     setSourceViewerConfiguration(new TartSourceViewerConfiguration(styleManager));
     setDocumentProvider(new TartDocumentProvider());
     setRangeIndicator(new DefaultRangeIndicator()); // enables standard
+  }
+  
+  @Override
+  protected ISourceViewer createSourceViewer(Composite parent,
+      IVerticalRuler ruler, int styles) {
+    ISourceViewer viewer = super.createSourceViewer(parent, ruler, styles);
+    if (viewer instanceof ISourceViewerExtension) {
+      ((ISourceViewerExtension) viewer).showAnnotationsOverview(true);
+    }
+    return viewer;
   }
 
   @Override
