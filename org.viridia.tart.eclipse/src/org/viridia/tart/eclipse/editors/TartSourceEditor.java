@@ -2,9 +2,13 @@ package org.viridia.tart.eclipse.editors;
 
 import java.text.BreakIterator;
 
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.IFindReplaceTarget;
+import org.eclipse.jface.text.IFindReplaceTargetExtension;
+import org.eclipse.jface.text.IFindReplaceTargetExtension3;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.jface.text.source.ISourceViewerExtension;
 import org.eclipse.jface.text.source.IVerticalRuler;
@@ -21,10 +25,11 @@ import org.eclipse.ui.texteditor.ITextEditorActionDefinitionIds;
 import org.eclipse.ui.texteditor.IUpdate;
 import org.eclipse.ui.texteditor.TextNavigationAction;
 import org.viridia.tart.eclipse.Activator;
+import org.viridia.tart.eclipse.preferences.TartPrefs;
 
 public class TartSourceEditor extends TextEditor {
-  private TartColorManager colorManager;
-  private TartStyleManager styleManager;
+  private final TartColorManager colorManager;
+  private final TartStyleManager styleManager;
 
   public TartSourceEditor() {
     super();
@@ -35,7 +40,7 @@ public class TartSourceEditor extends TextEditor {
     setDocumentProvider(new TartDocumentProvider());
     setRangeIndicator(new DefaultRangeIndicator()); // enables standard
   }
-  
+
   @Override
   protected ISourceViewer createSourceViewer(Composite parent,
       IVerticalRuler ruler, int styles) {
@@ -108,16 +113,56 @@ public class TartSourceEditor extends TextEditor {
     markAsStateDependentAction(ITextEditorActionDefinitionIds.DELETE_NEXT_WORD, true);
   }
 
+  @Override
   public void dispose() {
     //Activator.getDefault().getPreferenceStore().removePropertyChangeListener(this);
     colorManager.dispose();
     super.dispose();
   }
 
+
+  @Override
+  public void doSave(IProgressMonitor progressMonitor) {
+    if (getPreferenceStore().getBoolean(TartPrefs.REMOVE_TRAILING_WHITESPACE)) {
+      removeTrailingWhitespace();
+    }
+    if (getPreferenceStore().getBoolean(TartPrefs.ENSURE_NEWLINE_AT_EOF)) {
+    }
+    super.doSave(progressMonitor);
+  }
+
+  public void removeTrailingWhitespace() {
+    if (isEditable()) {
+      IFindReplaceTarget findReplaceTarget = (IFindReplaceTarget) getAdapter(IFindReplaceTarget.class);
+      if (findReplaceTarget instanceof IFindReplaceTargetExtension3) {
+        IFindReplaceTargetExtension3 findReplaceTargetExtension3 =
+            (IFindReplaceTargetExtension3) findReplaceTarget;
+        try {
+          IFindReplaceTargetExtension findReplaceTargetExtension =
+              (IFindReplaceTargetExtension) findReplaceTarget;
+          findReplaceTargetExtension.beginSession();
+          int offset = 0;
+          while (offset != -1) {
+            offset = findReplaceTargetExtension3.findAndSelect(
+                offset, "[\\t ]+$", true, false, false, true);
+            if (offset == -1) {
+              break;
+            }
+            findReplaceTargetExtension3.replaceSelection("", false);
+          }
+        } finally {
+          IFindReplaceTargetExtension findReplaceTargetExtension =
+              (IFindReplaceTargetExtension) findReplaceTarget;
+          findReplaceTargetExtension.endSession();
+        }
+      }
+    }
+  }
+
   //public void propertyChange(PropertyChangeEvent event) {
   //  setSourceViewerConfiguration(new TartSourceViewerConfiguration(styleManager));
   //}
-  
+
   private static boolean isTartWordBreak(char prevCh, char nextCh) {
     if (nextCh == '\n') {
       // Always a word break before a LF unless it's a CRLF.
@@ -153,14 +198,15 @@ public class TartSourceEditor extends TextEditor {
 
     /**
      * Creates a new next sub-word action.
-     * 
+     *
      * @param code Action code for the default operation. Must be an action code from
      *      @see org.eclipse.swt.custom.ST.
      */
     protected NextSubWordAction(int code) {
       super(getSourceViewer().getTextWidget(), code);
     }
-    
+
+    @Override
     public void run() {
       // Check whether we are in a Tart code partition and the preference is enabled
       //final IPreferenceStore store = getPreferenceStore();
@@ -185,7 +231,7 @@ public class TartSourceEditor extends TextEditor {
 
     /**
      * Finds the next position after the given position.
-     * 
+     *
      * @param position the current position
      * @return the next position
      */
@@ -207,18 +253,18 @@ public class TartSourceEditor extends TextEditor {
 
           ch = nextCh;
         }
-      
+
       } catch (BadLocationException e) {
         return length;
       }
 
       return position;
     }
-    
+
     /**
      * Sets the caret position to the sub-word boundary given with
      * <code>position</code>.
-     * 
+     *
      * @param position Position where the action should move the caret
      */
     protected abstract void setCaretPosition(int position);
@@ -233,6 +279,7 @@ public class TartSourceEditor extends TextEditor {
       super(ST.WORD_NEXT);
     }
 
+    @Override
     protected void setCaretPosition(final int position) {
       getTextWidget().setCaretOffset(modelOffset2WidgetOffset(getSourceViewer(), position));
     }
@@ -247,6 +294,7 @@ public class TartSourceEditor extends TextEditor {
       super(ST.DELETE_WORD_NEXT);
     }
 
+    @Override
     protected void setCaretPosition(final int position) {
       if (!validateEditorInputState()) {
         return;
@@ -288,6 +336,7 @@ public class TartSourceEditor extends TextEditor {
       super(ST.SELECT_WORD_NEXT);
     }
 
+    @Override
     protected void setCaretPosition(final int position) {
       final ISourceViewer viewer = getSourceViewer();
       final StyledText text = viewer.getTextWidget();
@@ -312,7 +361,7 @@ public class TartSourceEditor extends TextEditor {
 
     /**
      * Creates a new previous sub-word action.
-     * 
+     *
      * @param code Action code for the default operation. Must be an action code from
      *      @see org.eclipse.swt.custom.ST.
      */
@@ -320,6 +369,7 @@ public class TartSourceEditor extends TextEditor {
       super(getSourceViewer().getTextWidget(), code);
     }
 
+    @Override
     public void run() {
       // Check whether we are in a Tart code partition and the preference is enabled
       /*final IPreferenceStore store = getPreferenceStore();
@@ -344,7 +394,7 @@ public class TartSourceEditor extends TextEditor {
 
     /**
      * Finds the previous position before the given position.
-     * 
+     *
      * @param position the current position
      * @return the previous position
      */
@@ -363,7 +413,7 @@ public class TartSourceEditor extends TextEditor {
           if (isTartWordBreak(prevCh, ch)) {
             break;
           }
-          
+
           ch = prevCh;
           --position;
         }
@@ -377,7 +427,7 @@ public class TartSourceEditor extends TextEditor {
     /**
      * Sets the caret position to the sub-word boundary given with
      * <code>position</code>.
-     * 
+     *
      * @param position Position where the action should move the caret
      */
     protected abstract void setCaretPosition(int position);
@@ -392,6 +442,7 @@ public class TartSourceEditor extends TextEditor {
       super(ST.WORD_PREVIOUS);
     }
 
+    @Override
     protected void setCaretPosition(final int position) {
       getTextWidget().setCaretOffset(modelOffset2WidgetOffset(getSourceViewer(), position));
     }
@@ -406,6 +457,7 @@ public class TartSourceEditor extends TextEditor {
       super(ST.DELETE_WORD_PREVIOUS);
     }
 
+    @Override
     protected void setCaretPosition(int position) {
       if (!validateEditorInputState())
         return;
@@ -446,6 +498,7 @@ public class TartSourceEditor extends TextEditor {
       super(ST.SELECT_WORD_PREVIOUS);
     }
 
+    @Override
     protected void setCaretPosition(final int position) {
       final ISourceViewer viewer = getSourceViewer();
       final StyledText text = viewer.getTextWidget();

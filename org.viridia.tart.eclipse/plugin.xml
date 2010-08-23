@@ -15,6 +15,16 @@
             class="org.viridia.tart.eclipse.preferences.TartPreferencePage"
             id="org.viridia.tart.eclipse.preferences.TartPreferencePage">
       </page>
+      <page name="Save Actions"
+            class="org.viridia.tart.eclipse.preferences.SaveActionsPreferencePage"
+            id="org.viridia.tart.eclipse.preferences.SaveActiionsPreferencePage"
+            category="org.viridia.tart.eclipse.preferences.TartPreferencePage">
+      </page>
+      <page name="Syntax Coloring"
+            class="org.viridia.tart.eclipse.preferences.SyntaxColoringPreferencePage"
+            id="org.viridia.tart.eclipse.preferences.SyntaxColoringPreferencePage"
+            category="org.viridia.tart.eclipse.preferences.TartPreferencePage">
+      </page>
    </extension>
    <extension point="org.eclipse.core.runtime.preferences">
       <initializer class="org.viridia.tart.eclipse.preferences.TartPrefs">

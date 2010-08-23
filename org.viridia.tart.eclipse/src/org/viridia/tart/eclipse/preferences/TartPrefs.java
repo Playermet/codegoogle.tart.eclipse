@@ -11,13 +11,13 @@ import org.viridia.tart.eclipse.Activator;
  * Class used to initialize default preference values.
  */
 public class TartPrefs extends AbstractPreferenceInitializer {
-  
+
   public static class SyntaxElement {
     private final String name;
     private final String caption;
     private final RGB defaultColor;
     private final int defaultStyle;
-    
+
     public SyntaxElement(String name, String caption, RGB defaultColor, int defaultStyle) {
       this.name = name;
       this.caption = caption;
@@ -41,7 +41,7 @@ public class TartPrefs extends AbstractPreferenceInitializer {
       return defaultStyle;
     }
   }
-  
+
   // text style preferences variables
   public static final String TART_SINGLE_LINE_COMMENT = "TART_SINGLE_LINE_COMMENT";
   public static final String TART_MULTI_LINE_COMMENT = "TART_MULTI_LINE_COMMENT";
@@ -60,6 +60,10 @@ public class TartPrefs extends AbstractPreferenceInitializer {
   public static final String TART_BRACE = "TART_BRACE";
   public static final String TART_ATTRIBUTE = "TART_ATTRIBUTE";
   public static final String TART_DEFAULT = "TART_DEFAULT";
+
+  // Other preferences
+  public static final String REMOVE_TRAILING_WHITESPACE = "removeTrailingWhitespace";
+  public static final String ENSURE_NEWLINE_AT_EOF = "ensureNewlineAtEOF";
 
   public static final String EDITOR_SUB_WORD_NAVIGATION = "EDITOR_SUB_WORD_NAVIGATION";
 
@@ -82,11 +86,12 @@ public class TartPrefs extends AbstractPreferenceInitializer {
     new SyntaxElement(TART_BRACE, "Braces", new RGB(0, 128, 0), 0),
     new SyntaxElement(TART_ATTRIBUTE, "Attributes", new RGB(64, 128, 0), 0)
   };
-  
+
   /**
    * @seeorg.eclipse.core.runtime.preferences.AbstractPreferenceInitializer#
    * initializeDefaultPreferences()
    */
+  @Override
   public void initializeDefaultPreferences() {
     IPreferenceStore store = Activator.getDefault().getPreferenceStore();
     for (SyntaxElement token : SYNTAX_ELEMENTS) {
@@ -94,7 +99,9 @@ public class TartPrefs extends AbstractPreferenceInitializer {
       store.setDefault(token.getName() + "_BOLD", (token.getDefaultStyle() & SWT.BOLD) != 0);
       store.setDefault(token.getName() + "_ITALIC", (token.getDefaultStyle() & SWT.ITALIC) != 0);
     }
-    
+
     store.setDefault(EDITOR_SUB_WORD_NAVIGATION, true);
+    store.setDefault(REMOVE_TRAILING_WHITESPACE, true);
+    store.setDefault(ENSURE_NEWLINE_AT_EOF, true);
   }
 }

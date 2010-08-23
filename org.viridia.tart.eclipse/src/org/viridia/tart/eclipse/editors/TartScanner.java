@@ -24,7 +24,7 @@ public class TartScanner extends RuleBasedScanner {
   // Declaration keywords
   static final public String[] DECL_KEYWORDS = { "namespace", "class",
       "struct", "interface", "protocol", "enum", "let", "var", "def", "undef",
-      "override", "fn", "get", "set", "macro", "friend" };
+      "override", "fn", "get", "set", "macro", "typealias", "friend" };
 
   // Operator keywords
   static final public String[] OPERATOR_KEYWORDS = { "and", "or",
