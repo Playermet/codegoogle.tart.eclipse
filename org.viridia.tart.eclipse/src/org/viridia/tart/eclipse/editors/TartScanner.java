@@ -18,8 +18,8 @@ public class TartScanner extends RuleBasedScanner {
   // Statement keywords
   static final public String[] STATEMENT_KEYWORDS = { "if", "else", "repeat",
       "for", "while", "return", "yield", "throw", "break", "continue",
-      "where", "switch", "case", "classify", "as", "try", "catch",
-      "finally", "using", "import" };
+      "where", "switch", "case", "match", "as", "try", "catch",
+      "finally", "using", "import", "with" };
 
   // Declaration keywords
   static final public String[] DECL_KEYWORDS = { "namespace", "class",
@@ -31,9 +31,10 @@ public class TartScanner extends RuleBasedScanner {
       "not", "is", "in", "isa" };
   
   // Built-in type names
-  static final public String[] BUILTIN_TYPES = { "bool", "char", "byte",
-      "short", "int", "long", "ubyte", "suhort", "uint", "ulong", "float",
-      "double", "void" };
+  static final public String[] BUILTIN_TYPES = { "bool", "char",
+      "byte", "int", "ubyte", "uint", "float",
+      "double", "void", "int8", "int16", "int32", "int64",
+      "uint8", "uint16", "uint32", "uint64" };
 
   // Access 
   static final public String[] VISIBILITY = { "public", "private",

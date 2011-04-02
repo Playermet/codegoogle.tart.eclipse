@@ -120,6 +120,10 @@ public class TartSourceEditor extends TextEditor {
     super.dispose();
   }
 
+  @Override
+  protected boolean isTabsToSpacesConversionEnabled() {
+    return true;
+  }
 
   @Override
   public void doSave(IProgressMonitor progressMonitor) {
@@ -127,19 +131,22 @@ public class TartSourceEditor extends TextEditor {
       removeTrailingWhitespace();
     }
     if (getPreferenceStore().getBoolean(TartPrefs.ENSURE_NEWLINE_AT_EOF)) {
+      // TODO: Implement
     }
     super.doSave(progressMonitor);
   }
 
   public void removeTrailingWhitespace() {
     if (isEditable()) {
-      IFindReplaceTarget findReplaceTarget = (IFindReplaceTarget) getAdapter(IFindReplaceTarget.class);
+      IFindReplaceTarget findReplaceTarget =
+          (IFindReplaceTarget) getAdapter(IFindReplaceTarget.class);
       if (findReplaceTarget instanceof IFindReplaceTargetExtension3) {
         IFindReplaceTargetExtension3 findReplaceTargetExtension3 =
             (IFindReplaceTargetExtension3) findReplaceTarget;
         try {
           IFindReplaceTargetExtension findReplaceTargetExtension =
               (IFindReplaceTargetExtension) findReplaceTarget;
+          rememberSelection();
           findReplaceTargetExtension.beginSession();
           int offset = 0;
           while (offset != -1) {
@@ -154,6 +161,7 @@ public class TartSourceEditor extends TextEditor {
           IFindReplaceTargetExtension findReplaceTargetExtension =
               (IFindReplaceTargetExtension) findReplaceTarget;
           findReplaceTargetExtension.endSession();
+          restoreSelection();
         }
       }
     }

@@ -94,4 +94,9 @@ public class TartSourceViewerConfiguration extends TextSourceViewerConfiguration
   public void handlePropertyChangedEvent(PropertyChangeEvent event) {
     styleManager.adaptToColorChange(event);
   }
+
+  @Override
+  public String[] getIndentPrefixes(ISourceViewer sourceViewer, String contentType) {
+    return new String[] { "  ", "\t" };
+  }
 }
