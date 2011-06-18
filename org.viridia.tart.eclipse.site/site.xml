@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/org.viridia.tart.eclipse.feature_1.0.0.2.jar" id="org.viridia.tart.eclipse.feature" version="1.0.0.2">
+      <category name="tart_tools"/>
+   </feature>
+   <category-def name="tart_tools" label="Tart Tools"/>
+</site>
