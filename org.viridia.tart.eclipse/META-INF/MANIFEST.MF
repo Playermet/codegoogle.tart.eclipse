@@ -9,5 +9,23 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.jface.text,
  org.eclipse.ui.editors
-Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
+Export-Package: org.viridia.tart.eclipse;uses:="org.eclipse.jface.resource,org.eclipse.ui.plugin,org.osgi.framework",
+ org.viridia.tart.eclipse.editors;
+  uses:="org.eclipse.jface.text,
+   org.eclipse.ui.texteditor,
+   org.eclipse.jface.text.source,
+   org.eclipse.core.runtime,
+   org.eclipse.jface.text.rules,
+   org.eclipse.jface.text.presentation,
+   org.eclipse.swt.graphics,
+   org.eclipse.jface.util,
+   org.eclipse.swt.widgets,
+   org.eclipse.ui.editors.text",
+ org.viridia.tart.eclipse.preferences;
+  uses:="org.eclipse.jface.preference,
+   org.eclipse.ui,
+   org.eclipse.swt.graphics,
+   org.eclipse.core.runtime.preferences,
+   org.eclipse.swt.widgets"
