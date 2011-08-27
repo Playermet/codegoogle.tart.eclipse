@@ -333,7 +333,7 @@ public class TartScanner extends RuleBasedScanner {
     
     addWords(STATEMENT_KEYWORDS, keywordRule, styles.getToken(TartPrefs.TART_STMT_KEYWORD));
     addWords(DECL_KEYWORDS, keywordRule, styles.getToken(TartPrefs.TART_DECL_KEYWORD));
-    addWords(OPERATOR_KEYWORDS, keywordRule, styles.getToken(TartPrefs.TART_OPERATOR));
+    addWords(OPERATOR_KEYWORDS, keywordRule, styles.getToken(TartPrefs.TART_OPERATOR_KEYWORD));
     addWords(VISIBILITY, keywordRule, styles.getToken(TartPrefs.TART_DECL_VISIBILITY));
     addWords(DECL_MODIFIERS, keywordRule, styles.getToken(TartPrefs.TART_DECL_MODIFIER));
     addWords(BUILTIN_TYPES, keywordRule, styles.getToken(TartPrefs.TART_BUILTIN_TYPENAME));

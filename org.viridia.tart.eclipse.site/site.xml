@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
    <description name="Tart Language Tools for Eclipse" url="http://eclipse.tart.googlecode.com/hg/org.viridia.tart.eclipse.site/site.xml">
-      
+      Source code editor for Tart programs.
    </description>
    <feature url="features/org.viridia.tart.eclipse.feature_1.0.0.2.jar" id="org.viridia.tart.eclipse.feature" version="1.0.0.2">
       <category name="tart_tools"/>

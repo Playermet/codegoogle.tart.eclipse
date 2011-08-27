@@ -12,6 +12,7 @@ import org.viridia.tart.eclipse.Activator;
  */
 public class TartPrefs extends AbstractPreferenceInitializer {
 
+  /** Represents a syntax coloring style definition. */
   public static class SyntaxElement {
     private final String name;
     private final String caption;
@@ -61,6 +62,14 @@ public class TartPrefs extends AbstractPreferenceInitializer {
   public static final String TART_ATTRIBUTE = "TART_ATTRIBUTE";
   public static final String TART_DEFAULT = "TART_DEFAULT";
 
+  // Print margin
+  /** @since 0.1 */
+  public static final String TART_PRINT_MARGIN = "tartPrintMargin";
+  /** @since 0.1 */
+  public static final String TART_PRINT_MARGIN_COLOR = "tartPrintMarginColor";
+  /** @since 0.1 */
+  public static final String TART_PRINT_MARGIN_COLUMN = "tartPrintMarginColumn";
+
   // Other preferences
   public static final String REMOVE_TRAILING_WHITESPACE = "removeTrailingWhitespace";
   public static final String ENSURE_NEWLINE_AT_EOF = "ensureNewlineAtEOF";
@@ -103,5 +112,8 @@ public class TartPrefs extends AbstractPreferenceInitializer {
     store.setDefault(EDITOR_SUB_WORD_NAVIGATION, true);
     store.setDefault(REMOVE_TRAILING_WHITESPACE, true);
     store.setDefault(ENSURE_NEWLINE_AT_EOF, true);
+    store.setDefault(TART_PRINT_MARGIN, true);
+    PreferenceConverter.setDefault(store, TART_PRINT_MARGIN_COLOR, new RGB(200, 200, 200));
+    store.setDefault(TART_PRINT_MARGIN_COLUMN, 100);
   }
 }

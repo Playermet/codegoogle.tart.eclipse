@@ -20,9 +20,11 @@ import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.editors.text.TextEditor;
+import org.eclipse.ui.texteditor.AbstractDecoratedTextEditorPreferenceConstants;
 import org.eclipse.ui.texteditor.DefaultRangeIndicator;
 import org.eclipse.ui.texteditor.ITextEditorActionDefinitionIds;
 import org.eclipse.ui.texteditor.IUpdate;
+import org.eclipse.ui.texteditor.SourceViewerDecorationSupport;
 import org.eclipse.ui.texteditor.TextNavigationAction;
 import org.viridia.tart.eclipse.Activator;
 import org.viridia.tart.eclipse.preferences.TartPrefs;
@@ -30,6 +32,12 @@ import org.viridia.tart.eclipse.preferences.TartPrefs;
 public class TartSourceEditor extends TextEditor {
   private final TartColorManager colorManager;
   private final TartStyleManager styleManager;
+
+  /**
+   * Preference key for print margin ruler color.
+   */
+  private static final String PRINT_MARGIN_COLOR =
+      AbstractDecoratedTextEditorPreferenceConstants.EDITOR_PRINT_MARGIN_COLOR;
 
   public TartSourceEditor() {
     super();
@@ -49,6 +57,15 @@ public class TartSourceEditor extends TextEditor {
       ((ISourceViewerExtension) viewer).showAnnotationsOverview(true);
     }
     return viewer;
+  }
+
+  @Override
+  protected void configureSourceViewerDecorationSupport(SourceViewerDecorationSupport support) {
+    super.configureSourceViewerDecorationSupport(support);
+	support.setMarginPainterPreferenceKeys(
+	    TartPrefs.TART_PRINT_MARGIN,
+	    TartPrefs.TART_PRINT_MARGIN_COLOR,
+		TartPrefs.TART_PRINT_MARGIN_COLUMN);
   }
 
   @Override

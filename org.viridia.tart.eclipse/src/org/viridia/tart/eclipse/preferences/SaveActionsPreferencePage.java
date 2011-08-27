@@ -21,15 +21,11 @@ public class SaveActionsPreferencePage extends FieldEditorPreferencePage impleme
   @Override
   protected void createFieldEditors() {
     removeTrailingWhitespace = new BooleanFieldEditor(
-        TartPrefs.REMOVE_TRAILING_WHITESPACE,
-        "Remove trailing whitespace",
-        getFieldEditorParent());
+        TartPrefs.REMOVE_TRAILING_WHITESPACE, "Remove trailing whitespace", getFieldEditorParent());
     addField(removeTrailingWhitespace);
 
     ensureNewlineAtEof = new BooleanFieldEditor(
-        TartPrefs.ENSURE_NEWLINE_AT_EOF,
-        "Ensure newline at EOF",
-        getFieldEditorParent());
+        TartPrefs.ENSURE_NEWLINE_AT_EOF, "Ensure newline at EOF", getFieldEditorParent());
     addField(ensureNewlineAtEof);
   }
 }

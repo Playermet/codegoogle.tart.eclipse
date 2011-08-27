@@ -2,7 +2,7 @@
 <feature
       id="org.viridia.tart.eclipse.feature"
       label="Tart Language Tooling"
-      version="1.0.0.2"
+      version="1.0.0.3"
       provider-name="Viridia">
 
    <description url="http://tart.googlecode.com">
